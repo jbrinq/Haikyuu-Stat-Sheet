@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volleyball Stats Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="navbar">
+    <span class="nav-logo">Volleyball Stats</span>
+    <div class="nav-right">
+      <span id="nav-username" class="nav-user"></span>
+      <button class="nav-btn" onclick="showPanel('friends')">Friends</button>
+      <button class="nav-btn" onclick="showPanel('matches')">Matches</button>
+      <button class="nav-btn danger" onclick="logout()">Log Out</button>
+    </div>
+  </nav>
+
+  <!-- Friends Panel (slide-in) -->
+  <div id="panel-friends" class="side-panel hidden">
+    <div class="panel-header">
+      <h2>Friends</h2>
+      <button class="close-btn" onclick="closePanel()">✕</button>
+    </div>
+
+    <div class="panel-section">
+      <label>Add friend by email</label>
+      <div class="input-row">
+        <input type="email" id="friend-email" placeholder="friend@example.com" />
+        <button class="btn-small" onclick="sendFriendRequest()">Add</button>
+      </div>
+      <p id="friend-msg" class="info-msg"></p>
+    </div>
+
+    <div class="panel-section">
+      <h3>Pending Requests</h3>
+      <ul id="pending-list" class="friend-list"></ul>
+    </div>
+
+    <div class="panel-section">
+      <h3>My Friends</h3>
+      <ul id="friends-list" class="friend-list"></ul>
+    </div>
+  </div>
+
+  <!-- Matches Panel (slide-in) -->
+  <div id="panel-matches" class="side-panel hidden">
+    <div class="panel-header">
+      <h2>Matches</h2>
+      <button class="close-btn" onclick="closePanel()">✕</button>
+    </div>
+
+    <div class="panel-section">
+      <label>New match name</label>
+      <div class="input-row">
+        <input type="text" id="match-name-input" placeholder="e.g. vs Rideau HS — June 9" />
+        <button class="btn-small" onclick="createMatch()">Create</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <h3>My Matches</h3>
+      <ul id="matches-list" class="match-list"></ul>
+    </div>
+
+    <div class="panel-section">
+      <h3>Shared With Me</h3>
+      <ul id="shared-list" class="match-list"></ul>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay hidden" onclick="closePanel()"></div>
+
+  <!-- Main Tracker -->
+  <div class="app">
+    <header>
+      <div class="match-bar">
+        <div>
+          <h1 id="match-title">No match selected</h1>
+          <p id="match-meta" class="match-meta">Open Matches to create or load one</p>
+        </div>
+        <div class="match-bar-actions">
+          <button class="btn-small" id="share-btn" onclick="openShareModal()" style="display:none">Share</button>
+          <button class="btn-small" id="refresh-btn" onclick="refreshStats()" style="display:none">Refresh</button>
+        </div>
+      </div>
+      <div id="position-tabs" class="position-tabs"></div>
+    </header>
+
+    <main>
+      <section class="actions-panel">
+        <h2>Log Action</h2>
+        <p id="player-logging-as" class="logging-as"></p>
+        <div id="action-grid" class="action-grid"></div>
+      </section>
+
+      <section class="chart-panel">
+        <h2 id="chart-title">Stat Sheet</h2>
+        <canvas id="radarChart"></canvas>
+        <div id="stat-bars" class="stat-bars"></div>
+      </section>
+    </main>
+
+    <section class="log-panel">
+      <div class="log-header">
+        <h2>Action Log</h2>
+        <div class="player-filter">
+          <label>Chart view:</label>
+          <select id="player-select" onchange="switchViewPlayer()">
+            <option value="__all__">All players</option>
+          </select>
+        </div>
+      </div>
+      <ul id="action-log">
+        <li class="empty">No actions logged yet.</li>
+      </ul>
+      <button id="reset-btn" onclick="resetCurrentMatch()">Reset Match Stats</button>
+    </section>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="share-modal" class="modal hidden">
+    <div class="modal-box">
+      <h2>Share Match</h2>
+      <p class="modal-sub">Share with a friend so they can log stats collaboratively.</p>
+      <ul id="share-friends-list" class="friend-list"></ul>
+      <p id="share-msg" class="info-msg"></p>
+      <button class="btn-secondary" onclick="closeShareModal()">Close</button>
+    </div>
+  </div>
+  <div id="modal-overlay" class="overlay hidden" onclick="closeShareModal()"></div>
+
+  <script type="module" src="app.js?v=20260609-position-charts"></script>
+</body>
+</html>
